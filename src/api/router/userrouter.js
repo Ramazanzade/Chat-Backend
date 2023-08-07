@@ -23,7 +23,7 @@ const {
     validateUserSignIn,
 } = require('../../Middlewares/validation/uservalidation');
 
-router.post('/create-user', validateUserSignUp, userVlidation, createUser, fileadd);
+router.post('/create-user', validateUserSignUp, userVlidation, createUser, );
 router.post('/sign-in', validateUserSignIn, userVlidation, userSignIn , fileget2);
 router.post('/sign-out', isAuth, signOut);
 router.get('/',GetAll, filesget);
