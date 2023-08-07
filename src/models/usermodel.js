@@ -21,7 +21,6 @@ const userSchema = new mongoose.Schema({
   },
   filename: {
     type: String,
-    required: true
   },
 });
 
