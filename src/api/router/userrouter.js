@@ -23,11 +23,11 @@ const {
     validateUserSignIn,
 } = require('../../Middlewares/validation/uservalidation');
 
-router.post('/create-user', validateUserSignUp, userVlidation, createUser, fileadd);
-router.post('/sign-in', validateUserSignIn, userVlidation, userSignIn , fileget2);
+router.post('/create-user', validateUserSignUp, userVlidation, createUser);
+router.post('/sign-in', validateUserSignIn, userVlidation, userSignIn);
 router.post('/sign-out', isAuth, signOut);
-router.get('/',GetAll, filesget);
-router.delete('/delete/:id',Delete, filedelet);
+router.get('/',GetAll);
+router.delete('/delete/:id',Delete);
 router.get('/users/:id', async (req, res) => {
   const result =await User.findOne({_id:req.params.id})
   if(result){
