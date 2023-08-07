@@ -10,6 +10,10 @@ const {
     signOut,
     GetAll,
     Delete,
+    fileadd,
+    filesget,
+    fileget2,
+    filedelet,
     
 } = require('../contruler/usercontruler');
 const { isAuth } = require('../../Middlewares/auht');
@@ -19,30 +23,11 @@ const {
     validateUserSignIn,
 } = require('../../Middlewares/validation/uservalidation');
 
-const multer = require('multer');
-
-const storage = multer.diskStorage({});
-
-const fileFilter = ( file, cb) => {
-    if (file.mimetype.startsWith('image')) {
-        cb(null, true);
-    } else {
-        cb('invalid image file!', false);
-    }
-};
-const uploads = multer({ storage, fileFilter });
-
-router.post('/create-user', validateUserSignUp, userVlidation, createUser);
-router.post('/sign-in', validateUserSignIn, userVlidation, userSignIn);
+router.post('/create-user', validateUserSignUp, userVlidation, createUser, fileadd);
+router.post('/sign-in', validateUserSignIn, userVlidation, userSignIn , fileget2);
 router.post('/sign-out', isAuth, signOut);
-router.get('/',GetAll);
-router.post(
-    '/upload-profile',
-    isAuth,
-    uploads.single('profile'),
-    uploadProfile
-);
-router.delete('/delete/:id',Delete);
+router.get('/',GetAll, filesget);
+router.delete('/delete/:id',Delete, filedelet);
 router.get('/users/:id', async (req, res) => {
   const result =await User.findOne({_id:req.params.id})
   if(result){

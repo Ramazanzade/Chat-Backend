@@ -21,6 +21,10 @@ const userSchema = new mongoose.Schema({
     type: String,
     enum: ['image'],
   },
+  filename: {
+    type: String,
+    required: true
+  },
 });
 
 
