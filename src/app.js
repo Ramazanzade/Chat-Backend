@@ -15,6 +15,7 @@ mongoose.connect(CONNECTION_STRING)
 app.options("*", cors({ origin: ['http://localhost:5555', "https://chat-backend-ulkc.onrender.com"], optionsSuccessStatus: 200 }));
 app.options("*", cors({ origin: '*', optionsSuccessStatus: 200 }));
 app.use('/api/user', userrouter)
+console.log('salam');
 app.use((err,res)=>{
     res.status(err.statusCode || 500).json({
         message:err?.message || "Server error",
