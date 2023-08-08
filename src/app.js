@@ -3,10 +3,12 @@ const { CONNECTION_STRING}=require('./confing')
 const {mongoose}= require('mongoose')
 const cors = require('cors')
 const app = express()
+const socket = require("socket.io");
 require('dotenv').config();
 const serverless = require("serverless-http");
 const userrouter = require('./api/router/userrouter')
 const fileupload = require('./api/router/filerouter')
+const chat = require('./api/router/chatrouter')
 app.use(cors())
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
@@ -17,6 +19,7 @@ app.options("*", cors({ origin: ['http://localhost:5555', "https://chat-backend-
 app.options("*", cors({ origin: '*', optionsSuccessStatus: 200 }));
 app.use('/api/user', userrouter)
 app.use('/api/user/file', fileupload)
+app.use('/api/chat', chat)
 console.log('salam');
 app.use((err,res)=>{
     res.status(err.statusCode || 500).json({
@@ -24,6 +27,8 @@ app.use((err,res)=>{
         statusCode:err.statusCode || 500
     })
 })
+
+
 
 
 module.exports=app
