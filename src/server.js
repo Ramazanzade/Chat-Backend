@@ -1,9 +1,10 @@
-const http = require('http');
+const https = require('https');
 const express = require('express');
 const socketIO = require('socket.io');
+const { log } = require('console');
 
 const app = express();
-const server = http.createServer(app);
+const server = https.createServer(app);
 const io = socketIO(server, {
   cors: {
     origin: "https://chat-backend-ulkc.onrender.com",
@@ -26,4 +27,6 @@ io.on("connection", (socket) => {
   });
 });
 
-server.listen(5555);
+server.listen(5555 , ()=>{
+  console.log('connet')
+});
