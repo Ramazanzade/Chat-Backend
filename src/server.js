@@ -1,7 +1,7 @@
 const http =require('http')
 const app =require('./app')
 require('dotenv').config();
-const socket = require("socket.io");
+const socket = io("https://chat-backend-ulkc.onrender.com");
 const server = http.createServer(app)
 const io = socket(server, {
     cors: {
