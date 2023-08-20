@@ -1,8 +1,8 @@
 const Messages = require("../../models/chatmodel");
 
-module.exports.getMessages = async (req, res, next) => {
+exports.getMessages = async (req, res, next) => {
   try {
-    const { from, to } = req.body;
+    const { from, to } = req.query; 
 
     const messages = await Messages.find({
       users: {
@@ -22,7 +22,7 @@ module.exports.getMessages = async (req, res, next) => {
   }
 };
 
-module.exports.addMessage = async (req, res, next) => {
+exports.addMessage = async (req, res, next) => {
   try {
     const { from, to, message } = req.body;
     const data = await Messages.create({
