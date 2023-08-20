@@ -1,27 +1,31 @@
-const http =require('http')
-const app =require('./app')
-require('dotenv').config();
-const socket = require("socket.io");
-const server = http.createServer(app)
-const io = socket(server, {
-    cors: {
-      origin: "https://chat-backend-ulkc.onrender.com",
-      credentials: true,
-    },
+const http = require('http');
+const express = require('express');
+const socketIO = require('socket.io');
+
+const app = express();
+const server = http.createServer(app);
+const io = socketIO(server, {
+  cors: {
+    origin: "https://chat-backend-ulkc.onrender.com",
+    credentials: true,
+  },
+});
+
+global.onlineUsers = new Map();
+io.on("connection", (socket) => {
+  global.chatSocket = socket;
+  socket.on("add-user", (userId) => {
+    onlineUsers.set(userId, socket.id);
   });
-  
-  global.onlineUsers = new Map();
-  io.on("connection", (socket) => {
-    global.chatSocket = socket;
-    socket.on("add-user", (userId) => {
-      onlineUsers.set(userId, socket.id);
-    });
-  
-    socket.on("send-msg", (data) => {
-      const sendUserSocket = onlineUsers.get(data.to);
-      if (sendUserSocket) {
-        socket.to(sendUserSocket).emit("msg-recieve", data.msg);
-      }
-    });})
-  
-server.listen(5555)
+
+  socket.on("send-msg", (data) => {
+    const sendUserSocket = onlineUsers.get(data.to);
+    if (sendUserSocket) {
+      socket.to(sendUserSocket).emit("msg-recieve", data.msg);
+    }
+  });
+});
+
+server.listen(5555, () => {
+  console.log('Server listening on port 5555');
+});
