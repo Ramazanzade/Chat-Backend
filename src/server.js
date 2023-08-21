@@ -1,32 +1,26 @@
 const http = require('http');
 const express = require('express');
-const socketIO = require('socket.io');
-const { log } = require('console');
-
 const app = express();
 const server = http.createServer(app);
-const io = socketIO(server, {
-  cors: {
-    origin: "https://chat-backend-ulkc.onrender.com",
-    credentials: true,
-  },
-});
+const socketIo = require("./api/contruler/soketcontruler"); 
+const io = socketIo.init(server); 
 
-global.onlineUsers = new Map();
+
 io.on("connection", (socket) => {
-  global.chatSocket = socket;
-  socket.on("add-user", (userId) => {
-    onlineUsers.set(userId, socket.id);
+  console.log(`User connected: ${socket.id}`);
+
+  socket.on("new-user", (username) => {
+    io.emit("user-connected", username);
   });
 
-  socket.on("send-msg", (data) => {
-    const sendUserSocket = onlineUsers.get(data.to);
-    if (sendUserSocket) {
-      socket.to(sendUserSocket).emit("msg-recieve", data.msg);
-    }
+  socket.on("send-message", (message) => {
+    io.emit("message-received", message);
+  });
+
+  socket.on("disconnect", () => {
+    console.log(`User disconnected: ${socket.id}`);
   });
 });
-
 server.listen(5555 , ()=>{
   console.log('connet')
 });

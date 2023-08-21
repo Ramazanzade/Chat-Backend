@@ -1,5 +1,5 @@
 const Messages = require("../../models/chatmodel");
-
+const io = require("./soketcontruler"); 
 exports.getMessages = async (req, res, next) => {
   try {
     const { from, to } = req.query; 
@@ -11,9 +11,11 @@ exports.getMessages = async (req, res, next) => {
     }).sort({ updatedAt: 1 });
 
     const projectedMessages = messages.map((msg) => {
+      io.getIO().emit("messages", projectedMessages);
       return {
         fromSelf: msg.sender.toString() === from,
         message: msg.message.text,
+        
       };
     });
     res.json(projectedMessages);
@@ -31,8 +33,20 @@ exports.addMessage = async (req, res, next) => {
       sender: from,
     });
 
-    if (data) return res.json({ msg: "Message added successfully." });
-    else return res.json({ msg: "Failed to add message to the database" });
+    if (data) {
+      io.getIO().emit("message", {
+        fromSelf: true,
+        message: message,
+      });
+      io.getIO().to(to).emit("message", {
+        fromSelf: false,
+        message: message,
+      });
+
+      return res.json({ msg: "Message added successfully." });
+    } else {
+      return res.json({ msg: "Failed to add message to the database" });
+    }
   } catch (ex) {
     next(ex);
   }
