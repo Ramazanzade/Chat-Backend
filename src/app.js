@@ -14,7 +14,7 @@ app.use(express.urlencoded({ extended: true }))
 mongoose.connect(CONNECTION_STRING)                                                     
 .then(res=>console.log('connect'))
 .catch(err=>console.log(err))
-app.options("*", cors({ origin: ['https://localhost:5555', "https://chat-backend-ulkc.onrender.com"], optionsSuccessStatus: 200 }));
+app.options("*", cors({ origin: ['http://localhost:5555', "https://chat-backend-ulkc.onrender.com"], optionsSuccessStatus: 200 }));
 app.options("*", cors({ origin: '*', optionsSuccessStatus: 200 }));
 app.use('/api/user', userrouter)
 app.use('/api/user/file', fileupload)

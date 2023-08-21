@@ -1,10 +1,10 @@
-const https = require('https');
+const http = require('http');
 const express = require('express');
 const socketIO = require('socket.io');
 const { log } = require('console');
 
 const app = express();
-const server = https.createServer(app);
+const server = http.createServer(app);
 const io = socketIO(server, {
   cors: {
     origin: "https://chat-backend-ulkc.onrender.com",
